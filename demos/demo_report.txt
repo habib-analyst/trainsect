@@ -1,0 +1,21 @@
+=== TRAINSECT EVIDENCE REPORT ===
+run:                 /home/hatch/workspace/trainsect/demos/demo_run
+verdict:             CONFIRMED (causal)
+provenance:          instrumented
+confidence:          causal by counterfactual replay (necessity + sufficiency)
+fidelity:            BIT-EXACT
+change point:        80 (threshold=3.0)
+step range:          [60, 90]
+trigger step:        60
+offending shard:     shard-3
+batch fingerprint:   639a024b373ce19a
+offending sample:    {'sample_index_in_batch': 3, 'sample_loss': 13.739205360412598, 'batch_mean_loss': 12.457656860351562}
+necessity:           True
+sufficiency:         True
+replays:             8 (540 replayed steps)
+wall time:           52.2s
+
+minimal repro:
+  trainsect replay --checkpoints /home/hatch/workspace/trainsect/demos/demo_run --from-step 60 --steps 30 --exclude-shard 3 # collapse vanishes (necessity)
+  trainsect replay --checkpoints /home/hatch/workspace/trainsect/demos/demo_run --from-step 60 --steps 30 --only-shard 3 # collapse reproduces (sufficiency)
+  trainsect replay --checkpoints /home/hatch/workspace/trainsect/demos/demo_run --from-step 60 --steps 30 --only-batch 639a024b373ce19a # trigger batch alone

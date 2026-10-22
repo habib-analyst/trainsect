@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+*.so
+
+# Regenerable checkpoint fixtures (rebuilt by tests / generators, not stored in git)
+*.pt
+*.pth
+*.safetensors
+*.bin
+
+# Run outputs (regenerable)
+demos/demo_run/
+demos/example_run/
+validation/run/
+*_trainsect/
+runs/
+
+# Local tooling / env
+.venv/
+venv/
+.env
+.DS_Store

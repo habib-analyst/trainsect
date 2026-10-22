@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trainsect"
+version = "0.2.0"
+description = "git bisect for training runs: name the exact step/shard/batch that caused a collapse, proven by replay"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Habib Ur Rehman" }]
+maintainers = [{ name = "Habib Ur Rehman" }]
+keywords = ["machine-learning", "debugging", "training", "reproducibility", "causal-inference", "pytorch"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Debuggers",
+    "Typing :: Typed",
+]
+requires-python = ">=3.10"
+dependencies = ["torch>=2.0", "numpy"]
+
+[project.urls]
+Homepage = "https://github.com/habib-analyst/trainsect"
+Repository = "https://github.com/habib-analyst/trainsect"
+Documentation = "https://github.com/habib-analyst/trainsect#readme"
+Issues = "https://github.com/habib-analyst/trainsect/issues"
+Demo = "https://huggingface.co/spaces/habib-analyst/trainsect-demo"
+
+[project.scripts]
+trainsect = "trainsect.cli:main"
+
+[project.optional-dependencies]
+dev = ["build", "twine"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

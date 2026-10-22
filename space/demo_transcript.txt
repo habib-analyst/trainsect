@@ -1,0 +1,44 @@
+=== TRAINSECT DEMO: nanoGPT-style tiny transformer + poison shard ===
+training 120 steps, poison shard=3 (steps 60-79)
+  step   0 shard 0 train_loss=  4.3811
+  step  20 shard 1 train_loss=  0.1188
+  step  40 shard 2 train_loss=  0.0027
+  step  60 shard 3 train_loss= 12.4577
+  step  80 shard 4 train_loss=  4.1259
+  step 100 shard 5 train_loss=  4.0403
+eval loss log: ['0:4.298', '10:1.749', '20:0.072', '30:0.006', '40:0.002', '50:0.002', '60:0.002', '70:3.871', '80:4.082', '90:4.067', '100:4.055', '110:4.026', '119:3.997']
+demo run saved to /home/hatch/workspace/trainsect/demos/demo_run
+
+=== TRAINSECT DIAGNOSE (live) ===
+[fidelity] replay 7622e7196398a345 vs original 7622e7196398a345 -> BIT-EXACT
+[Stage A] change point: {'change_point_step': 80, 'threshold': 3.0, 'baseline': 0.001927278353832662, 'eval_loss_at_cp': 4.0823655128479}
+[thresholds] train-spike=3.035 eval-health=3.000
+[Stage B] checkpoint binary search -> {'ok': True, 'bracket': (60, 90)}
+[Stage C] pinpoint: first train spike at step 60 (loss=12.457655906677246); first eval crossing at 70 inside bracket [60, 90)
+[Stage D] offending shard = shard-3
+[Stage E] necessity=True sufficiency=True
+[Stage E] trigger batch: step 60, shard 3, fingerprint 639a024b373ce19a
+[Stage E] offending sample: {'sample_index_in_batch': 3, 'sample_loss': 13.739205360412598, 'batch_mean_loss': 12.457656860351562}
+
+=== TRAINSECT EVIDENCE REPORT ===
+run:                 /home/hatch/workspace/trainsect/demos/demo_run
+verdict:             CONFIRMED (causal)
+provenance:          instrumented
+confidence:          causal by counterfactual replay (necessity + sufficiency)
+fidelity:            BIT-EXACT
+change point:        80 (threshold=3.0)
+step range:          [60, 90]
+trigger step:        60
+offending shard:     shard-3
+batch fingerprint:   639a024b373ce19a
+offending sample:    {'sample_index_in_batch': 3, 'sample_loss': 13.739205360412598, 'batch_mean_loss': 12.457656860351562}
+necessity:           True
+sufficiency:         True
+replays:             8 (540 replayed steps)
+wall time:           52.2s
+
+minimal repro:
+  trainsect replay --checkpoints /home/hatch/workspace/trainsect/demos/demo_run --from-step 60 --steps 30 --exclude-shard 3 # collapse vanishes (necessity)
+  trainsect replay --checkpoints /home/hatch/workspace/trainsect/demos/demo_run --from-step 60 --steps 30 --only-shard 3 # collapse reproduces (sufficiency)
+  trainsect replay --checkpoints /home/hatch/workspace/trainsect/demos/demo_run --from-step 60 --steps 30 --only-batch 639a024b373ce19a # trigger batch alone
+
